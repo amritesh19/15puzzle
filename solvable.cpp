@@ -1,6 +1,6 @@
 // C++ program to check if a given instance of N*N-1
 // puzzle is solvable or not
-#include <iostream>
+#include <bits/stdc++.h>
 #define N 4
 using namespace std;
 
@@ -10,64 +10,107 @@ using namespace std;
 // here is to keep code small and simple.
 int getInvCount(int arr[])
 {
-	int inv_count = 0;
-	for (int i = 0; i < N * N - 1; i++)
-	{
-		for (int j = i + 1; j < N * N; j++)
-		{
-			// count pairs(arr[i], arr[j]) such that
-			// i < j but arr[i] > arr[j]
-			if (arr[j] && arr[i] && arr[i] > arr[j])
-				inv_count++;
-		}
-	}
-	return inv_count;
+    int inv_count = 0;
+    for (int i = 0; i < N * N - 1; i++)
+    {
+        for (int j = i + 1; j < N * N; j++)
+        {
+            // count pairs(arr[i], arr[j]) such that
+            // i < j but arr[i] > arr[j]
+            if (arr[j] && arr[i] && arr[i] > arr[j])
+                inv_count++;
+        }
+    }
+    return inv_count;
 }
 
 // find Position of blank from bottom
 int findXPosition(int puzzle[N][N])
 {
-	// start from bottom-right corner of matrix
-	for (int i = N - 1; i >= 0; i--)
-		for (int j = N - 1; j >= 0; j--)
-			if (puzzle[i][j] == 0)
-				return N - i;
+    // start from bottom-right corner of matrix
+    for (int i = N - 1; i >= 0; i--)
+        for (int j = N - 1; j >= 0; j--)
+            if (puzzle[i][j] == 0)
+                return N - i;
+
+    return 0;
 }
 
 // This function returns true if given
 // instance of N*N - 1 puzzle is solvable
 bool isSolvable(int puzzle[N][N])
 {
-	// Count inversions in given puzzle
-	int invCount = getInvCount((int*)puzzle);
+    // Count inversions in given puzzle
+    int invCount = getInvCount((int *)puzzle);
 
-	// If grid is odd, return true if inversion
-	// count is even.
-	if (N & 1)
-		return !(invCount & 1);
+    // If grid is odd, return true if inversion
+    // count is even.
+    if (N & 1)
+        return !(invCount & 1);
 
-	else	 // grid is even
-	{
-		int pos = findXPosition(puzzle);
-		if (pos & 1)
-			return !(invCount & 1);
-		else
-			return invCount & 1;
-	}
+    else // grid is even
+    {
+        int pos = findXPosition(puzzle);
+        if (pos & 1)
+            return !(invCount & 1);
+        else
+            return invCount & 1;
+    }
+}
+
+void puzzleMap(int puzzle[N][N])
+{
+    // cout << "\n\n -----  15-puzzle  -----"
+    //      << "\n";
+
+    for (int i = 0; i <= N - 1; i++)
+    {
+        cout << " ----- ----- ----- -----"
+             << "\n";
+        cout << "| ";
+        for (int j = 0; j <= N - 1; j++)
+        {
+            if (puzzle[i][j] == 0)
+                cout << "    | ";
+            else if (puzzle[i][j] < 10)
+                cout << " " << puzzle[i][j] << "  | ";
+            else
+                cout << puzzle[i][j] << "  | ";
+        }
+        cout << "\n";
+    }
+
+    cout << " ----- ----- ----- -----"
+         << "\n\n";
+}
+
+void final()
+{
+    int finalMap[N][N] =
+        {
+            {1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12}, // Value 0 is used for empty space
+            {13, 14, 15, 0},
+        };
+
+    cout << "\n\n -----   Final     -----"
+         << "\n";
+    puzzleMap(finalMap);
 }
 
 /* Driver program to test above functions */
 int main()
 {
 
-	int puzzle[N][N] =
-	{
-		{12, 1, 10, 2},
-		{7, 11, 4, 14},
-		{5, 0, 9, 15}, // Value 0 is used for empty space
-		{8, 13, 6, 3},
-	};
-	/*
+    int puzzle[N][N] =
+        {
+            {12, 1, 10, 2},
+            {7, 11, 4, 14},
+            {5, 0, 9, 15}, // Value 0 is used for empty space
+            {8, 13, 6, 3},
+        };
+    /*
 	int puzzle[N][N] = {{1, 8, 2},
 					{0, 4, 3},
 					{7, 6, 5}};
@@ -95,7 +138,10 @@ int main()
 				};
 	*/
 
-	isSolvable(puzzle)? cout << "Solvable":
-						cout << "Not Solvable";
-	return 0;
+    puzzleMap(puzzle);
+
+    isSolvable(puzzle) ? cout << "Solvable" : cout << "Not Solvable";
+
+    final();
+    return 0;
 }
